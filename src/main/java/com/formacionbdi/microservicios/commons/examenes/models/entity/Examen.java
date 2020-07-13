@@ -31,14 +31,6 @@ public class Examen {
 	
 	private String nombre;
 	
-	@JsonIgnoreProperties(value= {"hijos"})
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Asignatura padre;
-	
-	@JsonIgnoreProperties(value = {"padre"}, allowSetters = true)
-	@OneToMany(fetch = FetchType.LAZY, mappedBy="padre", cascade = CascadeType.ALL)
-	private List<Asignatura> hijos;
-	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="create_at")
 	private Date createAt;
@@ -46,7 +38,7 @@ public class Examen {
 	@JsonIgnoreProperties(value = {"examen"}, allowSetters = true)
 	@OneToMany(mappedBy = "examen", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Pregunta> preguntas;
-	
+		
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Asignatura asignatura;
 	
@@ -111,22 +103,6 @@ public class Examen {
 		this.asignatura = asignatura;
 	}
 	
-	public Asignatura getPadre() {
-		return padre;
-	}
-
-	public void setPadre(Asignatura padre) {
-		this.padre = padre;
-	}
-
-	public List<Asignatura> getHijos() {
-		return hijos;
-	}
-
-	public void setHijos(List<Asignatura> hijos) {
-		this.hijos = hijos;
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if(this == obj) {
