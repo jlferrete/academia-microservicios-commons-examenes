@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -30,6 +31,14 @@ public class Examen {
 	
 	private String nombre;
 	
+	@JsonIgnoreProperties(value= {"hijos"})
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Asignatura padre;
+	
+	@JsonIgnoreProperties(value = {"padre"}, allowSetters = true)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="padre", cascade = CascadeType.ALL)
+	private List<Asignatura> hijos;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="create_at")
 	private Date createAt;
@@ -38,7 +47,8 @@ public class Examen {
 	@OneToMany(mappedBy = "examen", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Pregunta> preguntas;
 	
-	
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Asignatura asignatura;
 	
 	public Examen() {
 		this.preguntas = new ArrayList<>();
@@ -91,6 +101,30 @@ public class Examen {
 	public void removePregunta(Pregunta pregunta) {
 		this.preguntas.remove(pregunta);
 		pregunta.setExamen(null);
+	}
+	
+	public Asignatura getAsignatura() {
+		return asignatura;
+	}
+
+	public void setAsignatura(Asignatura asignatura) {
+		this.asignatura = asignatura;
+	}
+	
+	public Asignatura getPadre() {
+		return padre;
+	}
+
+	public void setPadre(Asignatura padre) {
+		this.padre = padre;
+	}
+
+	public List<Asignatura> getHijos() {
+		return hijos;
+	}
+
+	public void setHijos(List<Asignatura> hijos) {
+		this.hijos = hijos;
 	}
 
 	@Override
